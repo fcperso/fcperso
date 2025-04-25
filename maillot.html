@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Maillot personnalisable - FC Perso</title>
+  <link rel="stylesheet" href="CSS/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+    }
+
+    header {
+      background-color: #000;
+      color: white;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-icon {
+      height: 30px;
+      width: auto;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+    }
+
+    nav {
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .maillot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .maillot-item {
+      cursor: pointer;
+      border: 2px solid transparent;
+      padding: 5px;
+      background-color: white;
+      border-radius: 8px;
+    }
+
+    .maillot-item:hover {
+      border-color: black;
+    }
+
+    .maillot-item.selected {
+      border: 3px solid black;
+    }
+
+    .maillot-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+    }
+
+    form input,
+    form select {
+      padding: 5px;
+      margin: 10px 5px;
+    }
+
+    .buttons {
+      margin-top: 15px;
+    }
+
+    .buttons button {
+      padding: 10px 15px;
+      background-color: black;
+      color: white;
+      border: none;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <img src="image/menu.png" alt="Menu" class="menu-icon" onclick="toggleMenu()">
+    <img src="image/logo.png" alt="Logo FC Perso" class="logo">
+  </header>
+
+  <!-- Menu déroulant -->
+  <nav id="mobileMenu" class="hidden">
+    <a href="index.html">Accueil</a>
+    <a href="coque.html">Coques</a>
+    <a href="gourde.html">Gourdes</a>
+    <a href="maillot.html">Maillots</a>
+    <a href="protege-tibia.html">Protège-tibias</a>
+  </nav>
+
+  <div class="container">
+    <h2>Choisis ton design de maillot :</h2>
+    <div class="maillot-grid" id="maillot-options">
+      <!-- Les images des maillots seront insérées ici -->
+    </div>
+
+    <form id="maillotForm" onsubmit="return validerMaillot()">
+      <input type="hidden" name="design" id="selectedMaillot">
+
+      <input type="text" name="prenom" id="prenom" placeholder="Prénom" required>
+      <input type="number" name="numero" id="numero" placeholder="Numéro" required>
+
+      <select name="taille" id="taille" required>
+        <option value="">-- Taille --</option>
+        <option>XS</option>
+        <option>S</option>
+        <option>M</option>
+        <option>L</option>
+        <option>XL</option>
+      </select>
+
+      <input type="text" name="equipe" id="equipe" placeholder="Nom de l'équipe" required>
+
+      <div class="buttons">
+        <button type="submit" id="ajouterPanier">Ajouter au panier</button>
+        <button type="submit" id="acheterMaintenant">Acheter maintenant</button>
+      </div>
+
+      <div class="error-message" id="maillot-error"></div>
+    </form>
+  </div>
+
+  <script>
+    const maillots = [
+      "maillot-blanc-bordeaux-triangle.jpg",
+      "maillot-blanc-violet.jpg",
+      "maillot-degrade-violet.jpg",
+      "maillot-jaune-noir-blanc.jpg",
+      "maillot-noir-doré.jpg",
+      "maillot-noir-rose.jpg",
+      "maillot-noir-rose-bande.jpg",
+      "maillot-noir-rose-blanc.jpg",
+      "maillot-noir-rouge-blanc.jpg",
+      "maillot-noir-vert.jpg",
+      "maillot-noir-vert-bande.jpg",
+      "maillot-noir-vert-blanc.jpg",
+      "maillot-orange-bleu.jpg",
+      "maillot-rose.jpg",
+      "maillot-rose-noir.jpg",
+      "maillot-rouge-blanc.jpg",
+      "maillot-rouge-blanc-graffity.jpg",
+      "maillot-rouge-noir.jpg",
+      "maillot-vert-blanc.jpg",
+      "maillot-vert-jaune.jpg",
+      "maillot-violet-jaune.jpg",
+      "maillot-violet-rose-bleu-triangle.jpg"
+    ];
+
+    const container = document.getElementById("maillot-options");
+    const selectedInput = document.getElementById("selectedMaillot");
+    const error = document.getElementById("maillot-error");
+
+    maillots.forEach(filename => {
+      const div = document.createElement("div");
+      div.classList.add("maillot-item");
+      div.innerHTML = `<img src="image/${filename}" alt="Maillot">`;
+      div.onclick = () => {
+        document.querySelectorAll(".maillot-item").forEach(el => el.classList.remove("selected"));
+        div.classList.add("selected");
+        selectedInput.value = filename;
+        error.textContent = "";
+      };
+      container.appendChild(div);
+    });
+
+    function validerMaillot() {
+      if (!selectedInput.value) {
+        error.textContent = "Vous n’avez pas sélectionné un design de maillot.";
+        return false;
+      }
+      return true;
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("hidden");
+    }
+
+    document.getElementById("ajouterPanier").addEventListener("click", (e) => {
+      e.preventDefault();
+      ajouterMaillotAuPanier();
+    });
+
+    document.getElementById("acheterMaintenant").addEventListener("click", (e) => {
+      e.preventDefault();
+      acheterMaillot();
+    });
+
+    function ajouterMaillotAuPanier() {
+      const design = selectedInput.value;
+      const prenom = document.getElementById("prenom").value;
+      const numero = document.getElementById("numero").value;
+      const taille = document.getElementById("taille").value;
+      const equipe = document.getElementById("equipe").value;
+
+      if (!design) {
+        error.textContent = "Veuillez sélectionner un design.";
+        return;
+      }
+
+      const produit = {
+        type: "Maillot",
+        image: "image/" + design,
+        options: { prenom, numero, taille, equipe }
+      };
+
+      ajouterProduitAuPanier(produit);
+    }
+
+    function acheterMaillot() {
+      ajouterMaillotAuPanier();
+      window.location.href = "panier.html";
+    }
+
+function ajouterProduitAuPanier(produit) {
+  const panier = JSON.parse(localStorage.getItem('panier')) || [];
+  panier.push(produit);
+  localStorage.setItem('panier', JSON.stringify(panier));
+  alert("Produit ajouté au panier !");
+}
+  </script>
+
+</body>
+
+</html>

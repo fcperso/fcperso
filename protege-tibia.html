@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Personnalisation Protège-Tibias</title>
+  <link rel="stylesheet" href="CSS/style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    /* Barre de navigation */
+    .navbar {
+      background-color: black;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      position: relative;
+    }
+
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+      margin-right: 15px;
+    }
+
+    .logo {
+      height: 40px;
+	  width:auto
+    }
+
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      background-color: #111;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+    }
+
+    .nav-links a {
+      color: white;
+      padding: 15px 20px;
+      text-decoration: none;
+      border-top: 1px solid #333;
+    }
+
+    .nav-links a:hover {
+      background-color: #222;
+    }
+
+    .nav-visible {
+      display: flex;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"], select, input[type="file"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .button-group button {
+      flex: 1;
+      padding: 15px;
+      background-color: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .button-group button:hover {
+      background-color: #333;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRE DE NAVIGATION COMME SUR MAILLOTS -->
+  <div class="navbar">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <img src="image/logo.png" alt="Logo" class="logo">
+  </div>
+
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">Accueil</a>
+    <a href="coque.html">Coques</a>
+    <a href="gourde.html">Gourdes</a>
+    <a href="maillot.html">Maillots</a>
+    <a href="protege-tibia.html">Protège-tibias</a>
+  </div>
+
+  <h1>Personnalisez vos protège-tibias</h1>
+
+  <form id="protegeForm">
+    <label for="taille">Taille :</label>
+    <select id="taille" name="taille" required>
+      <option value="Small">Small</option>
+      <option value="Large">Large</option>
+    </select>
+
+    <label for="prenom">Prénom :</label>
+    <input type="text" id="prenom" name="prenom" placeholder="Entrez le prénom" required>
+
+    <label for="numero">Numéro :</label>
+    <input type="text" id="numero" name="numero" placeholder="Entrez le numéro" required>
+
+    <label for="image">Importer une image :</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
+
+    <div class="button-group">
+      <button type="button" onclick="submitForm('panier')">Ajouter au panier</button>
+      <button type="button" onclick="submitForm('acheter')">Acheter maintenant</button>
+    </div>
+  </form>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById("navLinks");
+      nav.classList.toggle("nav-visible");
+    }
+
+    function submitForm(action) {
+      const prenom = document.getElementById("prenom").value.trim();
+      const numero = document.getElementById("numero").value.trim();
+      const image = document.getElementById("image").files.length;
+
+      if (!prenom || !numero || !image) {
+        alert("Veuillez remplir tous les champs et importer une image.");
+        return;
+      }
+
+      alert(`Formulaire soumis avec action : ${action}`);
+    }
+  </script>
+
+</body>
+</html>

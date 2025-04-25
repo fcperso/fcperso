@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Personnalisation Gourde</title>
+  <link rel="stylesheet" href="CSS/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* BARRE NOIRE */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: black;
+      color: white;
+      padding: 10px 20px;
+      position: relative;
+    }
+
+    .navbar .left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .navbar .menu-icon {
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .navbar .logo img {
+      height: 40px;
+    }
+
+    .navbar .cart-icon img {
+      height: 28px;
+      cursor: pointer;
+    }
+
+    /* MENU HAMBURGER CACHÉ */
+    .side-menu {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 200px;
+      background-color: #222;
+      color: white;
+      display: none;
+      flex-direction: column;
+      z-index: 10;
+      padding: 10px;
+    }
+
+    .side-menu a {
+      color: white;
+      padding: 10px 0;
+      text-decoration: none;
+      border-bottom: 1px solid #444;
+    }
+
+    .side-menu a:hover {
+      background-color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .gourde-selection {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin: 30px;
+    }
+
+    .gourde-option {
+      border: 2px solid transparent;
+      padding: 5px;
+      cursor: pointer;
+      transition: border 0.3s;
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+    }
+
+    .gourde-option img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gourde-option:hover,
+    .gourde-option.selected {
+      border-color: black;
+    }
+
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"], select, input[type="file"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .button-group button {
+      flex: 1;
+      padding: 15px;
+      background-color: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .button-group button:hover {
+      background-color: #333;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRE NOIRE -->
+  <div class="navbar">
+    <div class="left">
+      <span class="menu-icon" onclick="toggleMenu()">&#9776;</span>
+      <div class="logo"><img src="image/logo.png" alt="Logo"></div>
+    </div>
+    <div class="cart-icon">
+      <a href="panier.html"><img src="image/panier.png" alt="Panier"></a>
+    </div>
+    <!-- Menu Hamburger déroulant -->
+    <div class="side-menu" id="sideMenu">
+      <a href="index.html">Accueil</a>
+      <a href="coque.html">Coques</a>
+      <a href="gourde.html">Gourdes</a>
+      <a href="maillot.html">Maillots</a>
+      <a href="protege-tibia.html">Protège-tibias</a>
+      <a href="panier.html">Panier</a>
+    </div>
+  </div>
+
+  <h1>Personnalisez votre gourde</h1>
+
+  <div class="gourde-selection" id="gourdeSelection">
+    <!-- Images de gourdes -->
+    <div class="gourde-option" data-couleur="blanche"><img src="image/gourde-blanche.jpg" alt="Gourde Blanche"></div>
+    <div class="gourde-option" data-couleur="gris"><img src="image/gourde-gris.jpg" alt="Gourde Grise"></div>
+    <div class="gourde-option" data-couleur="jaune-fluo"><img src="image/gourde-jaune-fluo.jpg" alt="Gourde Jaune Fluo"></div>
+    <div class="gourde-option" data-couleur="marine"><img src="image/gourde-marine.jpg" alt="Gourde Marine"></div>
+    <div class="gourde-option" data-couleur="moutarde"><img src="image/gourde-moutarde.jpg" alt="Gourde Moutarde"></div>
+    <div class="gourde-option" data-couleur="noir"><img src="image/gourde-noir.jpg" alt="Gourde Noire"></div>
+    <div class="gourde-option" data-couleur="orange"><img src="image/gourde-orange.jpg" alt="Gourde Orange"></div>
+    <div class="gourde-option" data-couleur="bleu-turquoise"><img src="image/gourde-bleu-turquoise.jpg" alt="Gourde Bleu Turquoise"></div>
+  </div>
+
+  <div class="error" id="errorMessage">Veuillez sélectionner un modèle de gourde.</div>
+
+  <form id="gourdeForm">
+    <label for="logo">Importer votre logo :</label>
+    <input type="file" id="logo" name="logo" accept="image/*" required>
+    <input type="hidden" name="couleurGourde" id="couleurGourde">
+    <div class="button-group">
+      <button type="button" onclick="submitForm('panier')">Ajouter au panier</button>
+      <button type="button" onclick="submitForm('acheter')">Acheter maintenant</button>
+    </div>
+  </form>
+
+  <script>
+    const options = document.querySelectorAll(".gourde-option");
+    const inputCouleur = document.getElementById("couleurGourde");
+    const errorMessage = document.getElementById("errorMessage");
+
+    options.forEach(option => {
+      option.addEventListener("click", () => {
+        options.forEach(o => o.classList.remove("selected"));
+        option.classList.add("selected");
+        inputCouleur.value = option.dataset.couleur;
+        errorMessage.style.display = "none";
+      });
+    });
+
+    function submitForm(action) {
+      if (!inputCouleur.value) {
+        errorMessage.style.display = "block";
+        return;
+      }
+      alert(`Formulaire soumis avec action : ${action}`);
+      // Ici tu peux faire le traitement AJAX ou redirection
+    }
+
+    // Afficher / cacher le menu
+    function toggleMenu() {
+      const menu = document.getElementById("sideMenu");
+      menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+    }
+  </script>
+
+</body>
+</html>

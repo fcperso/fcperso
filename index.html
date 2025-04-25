@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>FC Perso - Accueil</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #111;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            position: relative;
+        }
+
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            background: white;
+            height: 3px;
+            margin: 4px 0;
+            width: 25px;
+        }
+
+        .logo {
+            margin-left: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .cart-icon {
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        .cart-icon img {
+            height: 28px;
+            cursor: pointer;
+        }
+
+        nav {
+            display: none;
+            flex-direction: column;
+            background-color: #222;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+        }
+
+        nav.show {
+            display: flex;
+        }
+
+        nav a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            background: #f9f9f9;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+        }
+
+        a.card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Bloc info */
+        .info-box {
+            width: 90%;
+            max-width: 600px;
+            margin: 40px auto;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+
+        .info-box:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .info-header {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .arrow {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .info-content {
+            padding: 0 20px 20px;
+            display: none;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .info-box.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .info-box.open .info-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="display: flex; align-items: center;">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="logo">
+                <img src="image/logo.png" alt="Logo FC Perso">
+            </div>
+        </div>
+        <div class="cart-icon" onclick="window.location.href='panier.html'">
+            <img src="image/panier.png" alt="Panier">
+        </div>
+        <nav id="menu">
+            <a href="index.html">Accueil</a>
+            <a href="maillot.html">Maillots</a>
+            <a href="coque.html">Coques</a>
+            <a href="gourde.html">Gourdes</a>
+            <a href="protege-tibia.html">Protège-tibias</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Nos articles personnalisables</h1>
+        <div class="grid">
+            <a href="coque.html" class="card-link">
+                <div class="card">
+                    <img src="image/coque.jpg" alt="Coque personnalisable">
+                    <h3>Coque</h3>
+                    <p>À partir de 15€</p>
+                </div>
+            </a>
+            <a href="maillot.html" class="card-link">
+                <div class="card">
+                    <img src="image/maillot.jpg" alt="Maillot personnalisable">
+                    <h3>Maillot</h3>
+                    <p>À partir de 35€</p>
+                </div>
+            </a>
+            <a href="gourde.html" class="card-link">
+                <div class="card">
+                    <img src="image/gourde.jpg" alt="Gourde personnalisable">
+                    <h3>Gourde</h3>
+                    <p>À partir de 20€</p>
+                </div>
+            </a>
+            <a href="protege-tibia.html" class="card-link">
+                <div class="card">
+                    <img src="image/protege-tibia.jpg" alt="Protège-tibia personnalisable">
+                    <h3>Protège-tibias</h3>
+                    <p>À partir de 25€</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="info-box" onclick="toggleInfo()">
+            <div class="info-header">
+                <span>📦 Information</span>
+                <span class="arrow" id="arrow">▼</span>
+            </div>
+            <div class="info-content" id="infoContent">
+                <p>🕒 Délai de traitement : <strong>2 jours</strong></p>
+                <p>🚚 Livraison estimée : <strong>7 à 14 jours</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("menu");
+            menu.classList.toggle("show");
+        }
+
+        function toggleInfo() {
+            const box = document.querySelector('.info-box');
+            box.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

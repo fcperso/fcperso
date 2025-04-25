@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Votre panier - FC Perso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f7f7f7;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .panier {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      background-color: white;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .item img {
+      width: 100px;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .details {
+      flex: 1;
+      margin-left: 20px;
+    }
+
+    .prix {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+
+    .paypal {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .paypal-button {
+      padding: 15px 30px;
+      background-color: #ffc439;
+      color: black;
+      border: none;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .paypal-button:hover {
+      background-color: #e6b800;
+    }
+
+    .supprimer-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .supprimer-btn img {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Votre panier</h1>
+  <div class="panier" id="panier-container"></div>
+
+  <div class="total" id="total-general">Total : 0 €</div>
+
+  <!-- Section PayPal avec un bouton pour valider et payer -->
+  <div class="paypal">
+    <button id="payerPaypal" class="paypal-button">Payer avec PayPal</button>
+  </div>
+
+  <script>
+  const prixParType = {
+    "Coque": 15,
+    "Gourde": 20,
+    "Maillot": 30,
+    "Protège-tibias": 25
+  };
+
+  const panier = JSON.parse(localStorage.getItem("panier") || "[]");
+  const container = document.getElementById("panier-container");
+  let total = 0;
+
+  // Fonction pour supprimer un article du panier
+  function supprimerArticle(index) {
+    panier.splice(index, 1); // Supprimer l'article du tableau
+    localStorage.setItem("panier", JSON.stringify(panier)); // Mettre à jour le panier dans le localStorage
+    actualiserPanier(); // Actualiser l'affichage du panier
+  }
+
+  // Fonction pour actualiser le panier
+  function actualiserPanier() {
+    container.innerHTML = ""; // Vider le contenu actuel du panier
+    total = 0; // Réinitialiser le total
+
+    panier.forEach((item, index) => {
+      const prix = prixParType[item.type] || 0;
+      total += prix;
+
+      const div = document.createElement("div");
+      div.className = "item";
+
+      let details = "";
+      for (const key in item.options) {
+        if (item.options[key]) {
+          details += `<div><strong>${key.charAt(0).toUpperCase() + key.slice(1)} :</strong> ${item.options[key]}</div>`;
+        }
+      }
+
+      div.innerHTML = ` 
+        <img src="${item.image}" alt="${item.type}">
+        <div class="details">
+          <div><strong>Type :</strong> ${item.type}</div>
+          ${details}
+        </div>
+        <div class="prix">${prix} €</div>
+        <button class="supprimer-btn" onclick="supprimerArticle(${index})">
+          <img src="image/poubelle.png" alt="Supprimer">
+        </button>
+      `;
+
+      container.appendChild(div);
+    });
+
+    document.getElementById("total-general").textContent = `Total : ${total.toFixed(2)} €`;
+  }
+
+  // Fonction pour valider la commande et rediriger vers PayPal
+  function validerCommande() {
+    if (panier.length === 0) {
+      alert("Votre panier est vide. Ajoutez des articles avant de valider.");
+      return;
+    }
+
+    // Mettez à jour le montant PayPal avec le total
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://www.paypal.com/cgi-bin/webscr';
+    
+    const hiddenFields = [
+      { name: 'cmd', value: '_xclick' },
+      { name: 'business', value: 'geg@gmx.fr' },
+      { name: 'item_name', value: 'Commande FC Perso' },
+      { name: 'amount', value: total.toFixed(2) },
+      { name: 'currency_code', value: 'EUR' },
+      { name: 'return', value: 'http://localhost/ma-boutique/merci.html' },
+      { name: 'cancel_return', value: 'http://localhost/ma-boutique/annule.html' },
+    ];
+
+    hiddenFields.forEach(field => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = field.name;
+      input.value = field.value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  // Ajouter l'événement au bouton pour valider la commande et payer avec PayPal
+  document.getElementById('payerPaypal').addEventListener('click', function() {
+    validerCommande();
+  });
+
+  actualiserPanier(); // Initialiser l'affichage du panier
+</script>
+
+</body>
+</html>

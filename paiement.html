@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Paiement - FC Perso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f7f7f7;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .paypal-button {
+      padding: 15px 30px;
+      background-color: #ffc439;
+      color: black;
+      border: none;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .paypal-button:hover {
+      background-color: #e6b800;
+    }
+
+    .note {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Finalisez votre commande</h1>
+    <p>Montant : <strong>29,99 €</strong></p>
+
+    <!-- Bouton PayPal -->
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+      <input type="hidden" name="cmd" value="_xclick">
+      <input type="hidden" name="business" value="geg@gmx.fr">
+      <input type="hidden" name="item_name" value="Commande FC Perso">
+      <input type="hidden" name="amount" value="29.99">
+      <input type="hidden" name="currency_code" value="EUR">
+      <input type="hidden" name="return" value="http://localhost/ma-boutique/merci.html">
+      <input type="hidden" name="cancel_return" value="http://localhost/ma-boutique/annule.html">
+      <input type="submit" value="Acheter avec PayPal" class="paypal-button">
+    </form>
+
+    <p class="note">Vous serez redirigé vers PayPal pour effectuer le paiement en toute sécurité.</p>
+  </div>
+
+</body>
+</html>
